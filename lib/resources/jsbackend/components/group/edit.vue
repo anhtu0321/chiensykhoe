@@ -68,20 +68,117 @@
 		</div>
 		<div class="row">
             <div class="col-md-10 trang justify-content-end">
-                <paginate :last_pages="listData.last_page" @loadData="loadData"></paginate>
+                <!-- <paginate :last_pages="listData.last_page" @loadData="loadData"></paginate> -->
             </div>
         </div>
 	</div>
 </template>
 
 <script>
+	import list from '../group/list.vue'
 export default {
     data(){
         return{
             tieude:'SỬA NHÓM QUYỀN',
             link:'Sửa',
+			error:'',
+			name:'',
+			display_name:'',
         }
-    }
+    },
+	computed:{
+		listChucNangCha(){
+			return this.$store.state.listChucNangCha;
+		},
+		listChucNangCon(){
+			var arr = [];
+			for( var i in this.listChucNangCha){
+				for(var j in this.listChucNangCha[i].per_child){
+					arr.push(this.listChucNangCha[i].per_child[j].id);
+				}
+			}
+			return arr;
+		},
+		listData(){
+			return this.$store.state.listRole;
+		},
+		page(){
+			return this.$store.state.pageRole;
+		}
+	},
+	methods:{
+		checkAll(){
+			this.mangcha=[];
+			this.mangcon=[];
+			if(this.check_all){
+				for (var i in this.listChucNangCha) {
+					this.mangcha.push(this.listChucNangCha[i].id);
+				}
+				for (var i in this.listChucNangCon) {
+					this.mangcon.push(this.listChucNangCon[i]);
+				}
+			}
+		},
+		checkModule(){
+			var checkCha = event.target;
+			var checkCon = checkCha.parentNode.parentNode.getElementsByClassName('check-con');
+			for (var i = 0; i < checkCon.length; i++) {
+				if(checkCha.checked == true && this.mangcon.indexOf(parseInt(checkCon[i].value)) == -1){
+					this.mangcon.push(parseInt(checkCon[i].value));
+				}
+				if(checkCha.checked == false && this.mangcon.indexOf(parseInt(checkCon[i].value)) != -1){
+					this.mangcon.splice(this.mangcon.indexOf(parseInt(checkCon[i].value)),1);
+					this.check_all = false;
+				}
+			}
+			if (this.listChucNangCon.length == this.mangcon.length){
+				this.check_all = true;
+			}
+		},
+		checkChild(){
+			var target = event.target;
+			var checkCon = target.parentNode.parentNode.getElementsByClassName('check-con');
+			var checkCha = target.parentNode.parentNode.parentNode.parentNode.getElementsByClassName('check-cha');
+			if(target.checked == false && this.mangcha.indexOf(parseInt(checkCha[0].value)) != -1){
+				this.mangcha.splice(this.mangcha.indexOf(parseInt(checkCha[0].value)),1);
+			}
+			if(target.checked == true){ //dang xu ly
+				let check = true;
+				for( var i = 0; i < checkCon.length; i++){
+					if(checkCon[i].checked == false){
+						check = false;
+					}
+				}
+				if(check == true && this.mangcha.indexOf(parseInt(checkCha[0].value)) == -1){
+					this.mangcha.push(parseInt(checkCha[0].value));
+				}
+			}
+			if (this.listChucNangCon.length == this.mangcon.length){
+				this.check_all = true;
+			}else{
+				this.check_all = false;
+			}
+		},
+		getDataById(id){
+			axios.get('/chiensykhoe/admin/getRole/'+id)
+			.then(response=>{
+				this.name = response.data[0].name;
+				this.display_name = response.data[0].display_name;
+				// console.log(response.data[0].name);
+			})
+			.catch(()=>{
+				this.getDataById(id);
+			})
+		}
+	},
+	components:{
+		list
+	},
+	mounted(){
+	
+		this.getDataById(this.$route.params.id);
+
+	}
 }
 </script>
 

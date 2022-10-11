@@ -107,6 +107,9 @@ export default {
 		},
 		listData(){
 			return this.$store.state.listRole;
+		},
+		page(){
+			return this.$store.state.pageRole;
 		}
 	},
 	methods:{
@@ -169,7 +172,14 @@ export default {
 			for(var i in this.mangcon){
 				data.append('mangcon[]', this.mangcon[i]);
 			}
-				axios.post('/chiensykhoe/admin/addRole', data);
+				axios.post('/chiensykhoe/admin/addRole', data)
+				.then(()=>{
+					this.$store.dispatch('acListRole', this.page);
+					this.name='';
+					this.display_name='';
+					this.mangcha='';
+					this.mangcon='';
+				});
 
 		}
 		// loadData(){
