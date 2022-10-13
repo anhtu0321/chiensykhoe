@@ -14,7 +14,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        return Role::orderby('id','asc')->paginate(10);
+        return Role::orderby('id','asc')->paginate(1);
     }
 
     /**
@@ -56,7 +56,7 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        return Role::where('id','=',$id)->get();
+        return Role::with('permission')->where('id','=',$id)->get();
     }
 
     /**
@@ -90,6 +90,6 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Role::destroy($id);
     }
 }

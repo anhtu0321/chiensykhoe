@@ -31,7 +31,18 @@ export default {
     },
     props:['listData'],
     methods:{
-
+        loadDataById(id){
+            this.idEdit = this.$route.params.id;
+            this.$emit('loadDataById', id);
+        },
+        deleteData(id){
+            axios.get('/chiensykhoe/admin/deleteRole/'+ id)
+            .then((response)=> {
+                this.$emit('deleted',id);
+                swal('Xóa Thành công !');
+            }
+            )
+        }
     },
     mounted(){
         this.idEdit = this.$route.params.id;

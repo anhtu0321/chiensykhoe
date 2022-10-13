@@ -181,16 +181,10 @@ export default {
 					this.mangcon='';
 				});
 
+		},
+		loadData(){
+			this.$store.dispatch('acListRole', this.page);
 		}
-		// loadData(){
-		// 	axios.get('/chiensykhoe/admin/listChucNangCha')
-		// 	.then(res=>{
-
-		// 	})
-		// 	.catch(err=>{
-
-		// 	})
-		// }
 
 	},
     components:{
@@ -200,7 +194,7 @@ export default {
 		if(this.$store.state.listChucNangCha == ''){
 			this.$store.dispatch('acListChucNangCha');
 		}
-		this.$store.dispatch('acListRole', 1);
+		this.$store.dispatch('acListRole', this.page);
 	}
 }
 </script>

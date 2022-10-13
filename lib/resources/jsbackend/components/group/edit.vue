@@ -62,20 +62,22 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-10 list">
-					<list :listData='listData' @deleted="loadData()"></list>
+					<list :listData='listData' @deleted="loadData" @loadDataById="getDataById"></list>
 				</div>
 			</div>
 		</div>
 		<div class="row">
             <div class="col-md-10 trang justify-content-end">
-                <!-- <paginate :last_pages="listData.last_page" @loadData="loadData"></paginate> -->
+                <paginate :last_pages="listData.last_page" @loadData="loadData"></paginate>
             </div>
         </div>
 	</div>
 </template>
 
 <script>
+	import contentHeader from '../content_header' 
 	import list from '../group/list.vue'
+	import paginate from '../group/page'
 export default {
     data(){
         return{
@@ -84,6 +86,9 @@ export default {
 			error:'',
 			name:'',
 			display_name:'',
+			mangcha:[],
+			mangcon:[],
+			check_all:false,
         }
     },
 	computed:{
@@ -164,20 +169,35 @@ export default {
 			.then(response=>{
 				this.name = response.data[0].name;
 				this.display_name = response.data[0].display_name;
-				// console.log(response.data[0].name);
+				this.mangcon = response.data[0].permission.map(e=>{
+					return e.id;
+				});
+				if(this.mangcon.length == this.listChucNangCon.length){
+					this.check_all = true;
+				}else{
+					this.check_all = false;
+				}
+				// console.log(per);
 			})
 			.catch(()=>{
 				this.getDataById(id);
 			})
+		},
+		loadData(){
+			this.$store.dispatch('acListRole', this.page);
 		}
 	},
 	components:{
-		list
+		list, contentHeader, paginate
 	},
 	mounted(){
-	
+		if(this.$store.state.listChucNangCha == ''){
+			this.$store.dispatch('acListChucNangCha');
+		}
 		this.getDataById(this.$route.params.id);
-
+		if(this.$store.state.listRole == ''){
+			this.$store.dispatch('acListRole',this.page);
+		}
 	}
 }
 </script>

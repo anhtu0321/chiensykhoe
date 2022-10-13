@@ -30,4 +30,5 @@ Route::group(['prefix'=>'admin'], function(){
     Route::post('/addRole','RoleController@store');
     Route::get('/listRole', 'RoleController@index');
     Route::get('/getRole/{id}','RoleController@show');
+    Route::get('/deleteRole/{id}', 'RoleController@destroy');
 });
