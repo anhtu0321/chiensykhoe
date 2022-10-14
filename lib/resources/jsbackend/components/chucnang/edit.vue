@@ -128,13 +128,22 @@ export default {
 			})
 		},
 		loadData(){
-			axios.get('/chiensykhoe/admin/listChucNang?page='+this.page)
-			.then(response=>{
-				this.listData = response.data;
-			})
-			.catch(
-				()=>{this.loadData();}
-			)
+			var n=0;
+			var load = ()=>{
+				axios.get('/chiensykhoe/admin/listChucNang?page='+this.page)
+				.then(response=>{
+					this.listData = response.data;
+				})
+				.catch(e=>{
+					n+=1;
+					console.log("error: load listChucNang");
+					if(n<5){
+						load();
+					}
+				})
+			}
+			load();
+			
 		},
 		loadDataById(id){
 			axios.get('/chiensykhoe/admin/getChucNang/'+id)
@@ -147,7 +156,7 @@ export default {
 			.catch(
 				()=>{this.loadDataById(id);}
 			)
-			//  = data.data[0].name;
+		
 		},
 		// ktquyen(key_code){
 		// 	for(var i in this.listPermissionOfUser){

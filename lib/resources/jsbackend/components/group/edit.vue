@@ -6,7 +6,7 @@
 				<div class="row">
 					<div class="col-md-10 main">
 						<!-- form -->
-						<form method="post" @submit.prevent="add">
+						<form method="post" @submit.prevent="edit">
 
 							<div class="form-row">
 								<div class="form-group col-md-6">
@@ -50,7 +50,8 @@
 							</div>
 							<!-- end row permission -->
 							<div class="form-group col-md-12 text-right">
-								<button type="submit" class="btn btn-primary btn-sm">Thêm Phân quyền</button>
+								<button type="submit" class="btn btn-success btn-sm" >Sửa Chức năng</button>
+								<router-link to="/role" class="btn btn-warning btn-sm">Quay lại</router-link>
 							</div>
 
 						</form>
@@ -165,26 +166,63 @@ export default {
 			}
 		},
 		getDataById(id){
-			axios.get('/chiensykhoe/admin/getRole/'+id)
-			.then(response=>{
-				this.name = response.data[0].name;
-				this.display_name = response.data[0].display_name;
-				this.mangcon = response.data[0].permission.map(e=>{
-					return e.id;
-				});
-				if(this.mangcon.length == this.listChucNangCon.length){
-					this.check_all = true;
-				}else{
-					this.check_all = false;
-				}
-				// console.log(per);
-			})
-			.catch(()=>{
-				this.getDataById(id);
-			})
+			var n = 0;
+			var load = ()=>{
+				axios.get('/chiensykhoe/admin/getRole/'+id)
+				.then(response=>{
+					this.name = response.data[0].name;
+					this.display_name = response.data[0].display_name;
+					// xu ly nut check con
+					this.mangcon = response.data[0].permission.map(e=>{
+						return e.id;
+					});
+					// xu ly nut check all
+					if(this.mangcon.length == this.listChucNangCon.length){
+						this.check_all = true;
+					}else{
+						this.check_all = false;
+					}
+					// xu ly nut check module
+					var arr_cha = this.listChucNangCha.map(e=>{return e.id});
+					for(var i in this.listChucNangCha){
+						for(var j in this.listChucNangCha[i].per_child){
+							if(this.mangcon.includes(this.listChucNangCha[i].per_child[j].id) == false){
+								arr_cha = arr_cha.filter(e=>{return e !== this.listChucNangCha[i].id});
+								// arr_cha.splice(arr_cha.indexOf(parseInt(this.listChucNangCha[i].id)),1); //day la cach 2
+								break;
+							};
+						}
+					}
+					this.mangcha = arr_cha;
+				})
+				.catch(e=>{
+					n+=1;
+					if(n<5){
+						load();
+					}
+					
+				})
+			}
+			load();
 		},
 		loadData(){
-			this.$store.dispatch('acListRole', this.page);
+			this.$store.dispatch('acListRole', this.page);	
+		},
+		edit(){
+			var data = new FormData;
+			data.append('name', this.name);
+			data.append('display_name', this.display_name);
+			for(var i in this.mangcon){
+				data.append('mangcon[]', this.mangcon[i]);
+			}
+			axios.post('/chiensykhoe/admin/updateRole/'+this.$route.params.id, data)
+			.then( response =>{
+				this.$store.dispatch('acListRole',this.page);
+				swal('update thanh cong');
+			})
+			.catch( e=>{
+				// this.edit();
+			})
 		}
 	},
 	components:{

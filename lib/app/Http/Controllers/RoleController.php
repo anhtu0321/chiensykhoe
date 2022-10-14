@@ -14,7 +14,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        return Role::orderby('id','asc')->paginate(1);
+        return Role::orderby('id','asc')->paginate(10);
     }
 
     /**
@@ -79,7 +79,17 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            DB::beginTransaction();
+            $role = Role::find($id);
+            $role->name = $request->name;
+            $role->display_name = $request->display_name;
+            $role->save();
+            $role->permission()->sync($request->mangcon);
+            DB::commit();
+        }catch(\Exception $exception){
+            DB::rollback();
+        }
     }
 
     /**
@@ -90,6 +100,16 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        Role::destroy($id);
+        try{
+            DB::beginTransaction();
+            $role = Role::find($id);
+            $role->permission()->detach();
+            Role::destroy($id);
+            DB::commit();
+        }catch(\Exception $exception){
+            DB::rollback();
+        }
+            
+
     }
 }
