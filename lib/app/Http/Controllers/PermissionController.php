@@ -42,6 +42,7 @@ class PermissionController extends Controller
 
     public function update(Request $request, $id)
     {
+        $this-> validateForm($request);
         $Permission = Permission::find($id);
         $Permission->name = $request->name;
         $Permission->display_name = $request->display_name;

@@ -43,6 +43,16 @@
 						</a>
 					</router-link>
 				</li>
+				<li class="nav-item">
+					<router-link to="/users" class="nav-link">
+						<a>
+							<i class="nav-icon fas fa-th"></i>
+							<p>
+								QL Tài khoản
+							</p>
+						</a>
+					</router-link>
+				</li>
 				
 				<li class="nav-item">
 					<a href="{{route('logout')}}" class="nav-link">

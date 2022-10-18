@@ -36,12 +36,25 @@ export default {
             this.$emit('loadDataById', id);
         },
         deleteData(id){
-            axios.get('/chiensykhoe/admin/deleteRole/'+ id)
-            .then((response)=> {
-                this.$emit('deleted',id);
-                swal('Xóa Thành công !');
-            }
-            )
+            swal('Bạn chắc chắn muốn xóa nó không ???',{
+                buttons:{
+                    cancel:'Hủy bỏ',
+                    delete:'Xóa',
+                }
+            })
+            .then((value)=>{
+                if(value =='cancel'){
+                    swal('Bạn đã hủy lệnh !');
+                }
+                if(value == 'delete'){
+                    axios.get('/chiensykhoe/admin/deleteRole/'+ id)
+                    .then((response)=> {
+                        this.$emit('deleted',id);
+                        swal('Xóa Thành công !');
+                    })
+                }
+            })
+            
         }
     },
     mounted(){

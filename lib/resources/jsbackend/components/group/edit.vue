@@ -221,7 +221,7 @@ export default {
 				swal('update thanh cong');
 			})
 			.catch( e=>{
-				// this.edit();
+				this.error = e.response.data.errors;
 			})
 		}
 	},

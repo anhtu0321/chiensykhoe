@@ -35,6 +35,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validateForm($request);
         try{
             DB::beginTransaction();
             $role = new Role;
@@ -79,6 +80,7 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validateForm($request);
         try{
             DB::beginTransaction();
             $role = Role::find($id);
@@ -111,5 +113,17 @@ class RoleController extends Controller
         }
             
 
+    }
+
+    public function validateForm(Request $request){
+        return $request->validate([
+            'name'=>'required',
+            'display_name'=>'required'
+        ], $messages=[
+            'required'=>':attribute không được để trống !'
+        ], $attribute=[
+            'name'=>'Tên nhóm quyền',
+            'display_name'=>'Tên đầy đủ nhóm quyền',
+        ]);
     }
 }

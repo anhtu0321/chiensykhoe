@@ -179,6 +179,10 @@ export default {
 					this.display_name='';
 					this.mangcha='';
 					this.mangcon='';
+				})
+				.catch(e=>{
+					this.error = e.response.data.errors;
+					// console.log(this.error);
 				});
 
 		},
