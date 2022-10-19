@@ -13,7 +13,7 @@ class PermissionController extends Controller
         return Permission::with('parent_permission')->orderby('parent_id','asc')->orderby('id','asc')->paginate(20);
     }
     public function listCha(){
-        return Permission::with('per_child')->where('parent_id','0')->select('name','id','parent_id')->orderby('name')->get();
+        return Permission::with('per_child:id,name,parent_id')->where('parent_id','0')->select('name','id','parent_id')->orderby('name')->get();
     }
     public function create()
     {

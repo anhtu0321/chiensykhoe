@@ -38,7 +38,7 @@
 									<select class="form-control form-control-sm" 
 										v-model="parent_id">
 										<option value="0">Chọn chức năng cha</option>
-										<option v-for="listCha in listChucNangCha" :key="listCha.id" :value="listCha.id">{{listCha.name}}</option>
+										<option v-for="list in listRole.data" :key="list.id" :value="list.id">{{list.name}}</option>
 									</select>
 								</div>
 								
@@ -56,7 +56,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-10 list">
-					<list :listData="listChucNang" @deleted='loadData'></list>
+					<list :listData="listRole" @deleted='loadData'></list>
 				</div>
 			</div>
 		</div>
@@ -88,8 +88,8 @@ export default {
 		}
 	},
 	computed:{
-		listChucNangCha(){
-			return this.$store.state.listChucNangCha;
+		listRole(){
+			return this.$store.state.listRole;
 		},
 		listChucNang(){
 			return this.$store.state.listChucNang;
@@ -127,7 +127,7 @@ export default {
 		}
 	},
 	mounted(){
-		this.$store.dispatch('acListChucNangCha');
+		this.$store.dispatch('acListRole');
 		if(this.$store.state.listChucNang == ''){this.$store.dispatch('acListChucNang',1);}
 	}
 }

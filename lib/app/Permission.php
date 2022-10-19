@@ -13,6 +13,6 @@ class Permission extends Model
         return $this->belongsTo('App\Permission', 'parent_id', 'id')->select('name','id','parent_id');
     }
     public function per_child(){
-        return $this->hasMany('App\Permission', 'parent_id', 'id')->select('name','id','parent_id');
+        return $this->hasMany('App\Permission', 'parent_id', 'id');
     }
 }

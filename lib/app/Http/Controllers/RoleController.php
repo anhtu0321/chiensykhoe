@@ -16,6 +16,9 @@ class RoleController extends Controller
     {
         return Role::orderby('id','asc')->paginate(10);
     }
+    public function list_role(){
+        return Role::orderby('id','asc')->get();
+    }
 
     /**
      * Show the form for creating a new resource.
