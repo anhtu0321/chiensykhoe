@@ -34,7 +34,18 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            DB::beginTransaction();
+            $user = new User;
+            $user->username = $request->username;
+            $user->fullname = $request->fullname;
+            $user->password = $request->password;
+            $user->save();
+            $user->role()->attach($request->roles);
+            DB::commit();
+        }catch(Exception $e){
+            DB::rollback();
+        }
     }
 
     /**

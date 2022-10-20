@@ -35,5 +35,6 @@ Route::group(['prefix'=>'admin'], function(){
     Route::get('/deleteRole/{id}', 'RoleController@destroy');
     // User
     Route::get('/listUser', 'UserController@index');
+    Route::post('/addUser', 'UserController@store');
 
 });

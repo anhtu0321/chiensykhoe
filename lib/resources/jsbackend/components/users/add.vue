@@ -56,11 +56,13 @@
 				</div>
 			</div>
 		</div>
-		<div class="row">
-            <div class="col-md-12 trang justify-content-end">
-                <paginate :last_pages="listUser.last_page" @loadData='loadData'></paginate>
-            </div>
-        </div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 trang justify-content-end">
+					<paginate :last_pages="listUser.last_page" @loadData='loadData'></paginate>
+				</div>
+			</div>
+		</div>
 	</div>
 
 </template>
@@ -99,17 +101,18 @@ export default {
 	methods:{
 		add(){
 			let data = new FormData;
-			data.append('name',this.name); 
-			data.append('display_name',this.display_name); 
-			data.append('key_code',this.key_code); 
-			data.append('parent_id',this.parent_id); 
-			axios.post('/chiensykhoe/admin/addChucNang', data)
+			data.append('username',this.username); 
+			data.append('fullname',this.fullname); 
+			data.append('password',this.password);
+			for(var i in this.roles){
+				data.append('roles[]',this.roles[i]);
+			} 
+			axios.post('/chiensykhoe/admin/addUser', data)
 			.then(response=>{
-				this.$store.dispatch('acListChucNangCha');
-				this.$store.dispatch('acListChucNang');
-				this.name = '';
-				this.display_name = '';
-				this.key_code = '';
+				this.$store.dispatch('acListUser');
+				this.username = '';
+				this.fullname = '';
+				this.password = '';
 				this.error = '';
 			})
 			.catch(error=>{
