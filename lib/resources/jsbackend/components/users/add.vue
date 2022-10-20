@@ -2,9 +2,9 @@
 	<div>
 		<content-header :tieude="tieude" :link="link"></content-header>
         <section class="content">
-    		<div class="container-fluid">
+    		<div class="container">
 				<div class="row">
-					<div class="col-md-10 main">
+					<div class="col-md-12 main">
 						<!-- form -->
 						<form method="post" @submit.prevent="add">
 
@@ -13,20 +13,20 @@
 									<label class="col-form-label col-form-label-sm">Tài khoản</label>
 									<input type="text" class="form-control form-control-sm" 
 										v-model="username" 
-										:class="{'is-invalid' : (error && error.name)}" >
+										:class="{'is-invalid' : (error && error.username)}" >
 									<p class="thongbao" v-if="error && error.name">{{ error.name[0]}}</p>
 								</div>
 								<div class="form-group col-md-4">
 									<label class="col-form-label col-form-label-sm">Tên hiển thị</label>
 									<input type="text" class="form-control form-control-sm" 
-										:class="{'is-invalid' : (error && error.display_name)}" 
+										:class="{'is-invalid' : (error && error.fullname)}" 
 										v-model="fullname">
 									<p class="thongbao" v-if="error && error.display_name">{{ error.display_name[0]}}</p>
 								</div>
 								<div class="form-group col-md-4">
 									<label class="col-form-label col-form-label-sm">Mật khẩu</label>
 									<input type="password" class="form-control form-control-sm" 
-										:class="{'is-invalid' : (error && error.key_code)}" 
+										:class="{'is-invalid' : (error && error.password)}" 
 										v-model="password">
 									<p class="thongbao" v-if="error && error.key_code">{{ error.key_code[0]}}</p>
 								</div>
@@ -35,11 +35,7 @@
 							<div class="form-row">
 								<div class="form-group col-md-5">
 									<label class="col-form-label col-form-label-sm">Phân quyền</label>
-									<select class="form-control form-control-sm" 
-										v-model="parent_id">
-										<option value="0">Chọn chức năng cha</option>
-										<option v-for="list in listRole.data" :key="list.id" :value="list.id">{{list.name}}</option>
-									</select>
+									<v-select multiple v-model="roles" :options="listRole.data" :reduce="(role)=>{return role.id}" label="name"></v-select>
 								</div>
 								
 							</div>
@@ -53,16 +49,16 @@
 				</div>
 			</div>
   		</section>
-		<div class="container-fluid">
+		<div class="container">
 			<div class="row">
-				<div class="col-md-10 list">
-					<list :listData="listRole" @deleted='loadData'></list>
+				<div class="col-md-12 list">
+					<list :listData="listUser" @deleted='loadData'></list>
 				</div>
 			</div>
 		</div>
 		<div class="row">
-            <div class="col-md-10 trang justify-content-end">
-                <paginate :last_pages="listChucNang.last_page" @loadData='loadData'></paginate>
+            <div class="col-md-12 trang justify-content-end">
+                <paginate :last_pages="listUser.last_page" @loadData='loadData'></paginate>
             </div>
         </div>
 	</div>
@@ -74,6 +70,8 @@
 import contentHeader from '../content_header'
 import list from './list.vue'
 import paginate from './page.vue'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
 export default {
 	data(){
 		return{
@@ -82,24 +80,21 @@ export default {
 			username:'',
 			fullname:'',
 			password:'',
+			roles:[],
 			error:'',
-			listData:'',
-			chuc_nang_cha:'',
+			listRole:'',
 		}
 	},
 	computed:{
-		listRole(){
-			return this.$store.state.listRole;
-		},
-		listChucNang(){
-			return this.$store.state.listChucNang;
+		listUser(){
+			return this.$store.state.listUser;
 		},
 		page(){
-			return this.$store.state.pageChucNang;
+			return this.$store.state.pageUser;
 		}
 	},
 	components:{
-		contentHeader, list, paginate
+		contentHeader, list, paginate, vSelect
 	},
 	methods:{
 		add(){
@@ -124,15 +119,34 @@ export default {
 		},
 		loadData(){
 			this.$store.dispatch('acListChucNang',this.page);
+		},
+		loadListRole(){
+			var n=0;
+			
+			var load = ()=>{
+				axios.get('/chiensykhoe/admin/listRoleFull')
+				.then(response=>{
+					this.listRole = response;
+				})
+				.catch((e)=>{
+					n+=1;
+					if(n<5){load();}
+				})
+			}
+			load();
 		}
 	},
 	mounted(){
-		this.$store.dispatch('acListRole');
-		if(this.$store.state.listChucNang == ''){this.$store.dispatch('acListChucNang',1);}
+		this.loadListRole();
+		if(this.$store.state.listUser == ''){this.$store.dispatch('acListUser',1);}
 	}
 }
 </script>
 
 <style scoped>
-
+.select2-selection__choice__display{
+	background: rgb(43, 92, 95);
+	padding:3px;
+	margin-left:5px;
+}
 </style>
