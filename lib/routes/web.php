@@ -30,11 +30,13 @@ Route::group(['prefix'=>'admin'], function(){
     Route::post('/addRole','RoleController@store');
     Route::get('/listRole', 'RoleController@index');
     Route::get('/listRoleFull', 'RoleController@list_role');
-    Route::get('/getRole/{id}','RoleController@show');
+    Route::get('/getRole/{id}','RoleController@edit');
     Route::post('/updateRole/{id}', 'RoleController@update');
     Route::get('/deleteRole/{id}', 'RoleController@destroy');
     // User
     Route::get('/listUser', 'UserController@index');
     Route::post('/addUser', 'UserController@store');
+    Route::get('/getUser/{id}','UserController@edit');
+    Route::post('/editUser/{id}','UserController@update');
 
 });

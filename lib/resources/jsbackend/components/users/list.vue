@@ -15,9 +15,9 @@
                 <td>{{index + 1}}</td>
                 <td>{{list.username}}</td>
                 <td>{{list.fullname}}</td>
-                <td></td>
+                <td><span v-for="role in list.role" :key="role.id">{{role.name}}, </span></td>
                 <td>
-                    <router-link class="btn btn-primary btn-sm" :to="`/chucnang/edit/${list.id}`" @click.native="loadDataById(list.id)">Sửa</router-link>
+                    <router-link class="btn btn-primary btn-sm" :to="`/users/edit/${list.id}`" @click.native="loadDataById(list.id)">Sửa</router-link>
                     <button class="btn btn-danger btn-sm" @click.prevent="deleteData(list.id)" >Xóa</button>
                 </td>
             </tr>

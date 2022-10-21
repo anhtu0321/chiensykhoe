@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use DB;
 class UserController extends Controller
 {
     /**
@@ -13,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::orderby('id','desc')->paginate(10);
+        return User::with('role:role.id,role.name')->orderby('id','desc')->paginate(10);
     }
 
     /**
@@ -39,11 +40,11 @@ class UserController extends Controller
             $user = new User;
             $user->username = $request->username;
             $user->fullname = $request->fullname;
-            $user->password = $request->password;
+            $user->password = bcrypt($request->password);
             $user->save();
             $user->role()->attach($request->roles);
             DB::commit();
-        }catch(Exception $e){
+        }catch(\Exception $e){
             DB::rollback();
         }
     }
@@ -67,7 +68,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        return User::with('role')->where('id','=',$id)->get();
     }
 
     /**
@@ -79,7 +80,18 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            DB::beginTransaction();
+            $user = User::find($id);
+            $user->username = $request->username;
+            $user->fullname = $request->fullname;
+            if($request->password != ''){$user->password = bcrypt($request->password);}
+            $user->save();
+            $user->role()->sync($request->roles);
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollback();
+        }
     }
 
     /**
