@@ -20,23 +20,24 @@ Route::get('/logout','LoginController@logOut')->name('logout');
 Route::group(['prefix'=>'admin'], function(){
     route::get('/','AdminController@getHome')->name('admin.home');
     // Permission
-    route::post('/addChucNang','PermissionController@store');
+    route::get('/listChucNang','PermissionController@index')->middleware('can:view_permission');
+    route::post('/addChucNang','PermissionController@store')->middleware('can:add_permission');
+    route::post('/updateChucNang/{id}','PermissionController@update')->middleware('can:edit_permission');
+    route::get('/deleteChucNang/{id}','PermissionController@destroy')->middleware('can:delete_permission');
     route::get('/listChucNangCha','PermissionController@listCha');
-    route::get('/listChucNang','PermissionController@index');
     route::get('/getChucNang/{id}','PermissionController@edit');
-    route::post('/updateChucNang/{id}','PermissionController@update');
-    route::get('/deleteChucNang/{id}','PermissionController@destroy');
     // Role
-    Route::post('/addRole','RoleController@store');
-    Route::get('/listRole', 'RoleController@index');
+    Route::get('/listRole', 'RoleController@index')->middleware('can:view_role');
+    Route::post('/addRole','RoleController@store')->middleware('can:add_role');
+    Route::post('/updateRole/{id}', 'RoleController@update')->middleware('can:edit_role');
+    Route::get('/deleteRole/{id}', 'RoleController@destroy')->middleware('can:delete_role');
     Route::get('/listRoleFull', 'RoleController@list_role');
     Route::get('/getRole/{id}','RoleController@edit');
-    Route::post('/updateRole/{id}', 'RoleController@update');
-    Route::get('/deleteRole/{id}', 'RoleController@destroy');
     // User
-    Route::get('/listUser', 'UserController@index');
-    Route::post('/addUser', 'UserController@store');
+    Route::get('/listUser', 'UserController@index')->middleware('can:view_user');
+    Route::post('/addUser', 'UserController@store')->middleware('can:add_user');
+    Route::post('/editUser/{id}','UserController@update')->middleware('can:edit_user');
+    Route::get('/deleteUser/{id}','UserController@destroy')->middleware('can:delete_user');
     Route::get('/getUser/{id}','UserController@edit');
-    Route::post('/editUser/{id}','UserController@update');
 
 });

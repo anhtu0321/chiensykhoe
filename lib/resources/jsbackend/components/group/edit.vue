@@ -53,7 +53,9 @@
 								<button type="submit" class="btn btn-success btn-sm" >Sửa Chức năng</button>
 								<router-link to="/role" class="btn btn-warning btn-sm">Quay lại</router-link>
 							</div>
-
+							<div class="alert alert-warning col-md-12 text-center" v-if="message!=''">
+									{{ message }}
+							</div>
 						</form>
 						<!-- end form -->
 					</div>
@@ -90,6 +92,7 @@ export default {
 			mangcha:[],
 			mangcon:[],
 			check_all:false,
+			message:'',
         }
     },
 	computed:{
@@ -218,10 +221,13 @@ export default {
 			axios.post('/chiensykhoe/admin/updateRole/'+this.$route.params.id, data)
 			.then( response =>{
 				this.$store.dispatch('acListRole',this.page);
-				swal('update thanh cong');
+				swal('Cập nhật thành công !');
 			})
 			.catch( e=>{
 				this.error = e.response.data.errors;
+				if(e.response.data.errors == undefined){
+					this.message = "Bạn không có quyền thực hiện thao tác này !";
+				}
 			})
 		}
 	},

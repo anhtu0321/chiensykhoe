@@ -52,6 +52,9 @@
 							<div class="form-group col-md-12 text-right">
 								<button type="submit" class="btn btn-primary btn-sm">Thêm Phân quyền</button>
 							</div>
+							<div class="alert alert-warning col-md-12 text-center" v-if="message!=''">
+									{{ message }}
+							</div>
 
 						</form>
 						<!-- end form -->
@@ -90,6 +93,7 @@ export default {
 			mangcon:[],
 			error:'',
 			check_all:false,
+			message:'',
         }
 	},
 	computed:{
@@ -166,6 +170,7 @@ export default {
 			}
 		},
 		add(){
+			// console.log(this.mangcon);
 			let data = new FormData;
 			data.append('name', this.name);
 			data.append('display_name', this.display_name);
@@ -182,7 +187,9 @@ export default {
 				})
 				.catch(e=>{
 					this.error = e.response.data.errors;
-					// console.log(this.error);
+					if(e.response.data.errors == undefined){
+						this.message = "Bạn không có quyền thực hiện thao tác này !";
+					}
 				});
 
 		},

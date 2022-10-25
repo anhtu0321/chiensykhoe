@@ -14,21 +14,21 @@
 									<input type="text" class="form-control form-control-sm" 
 										v-model="username" 
 										:class="{'is-invalid' : (error && error.username)}" >
-									<p class="thongbao" v-if="error && error.name">{{ error.name[0]}}</p>
+									<p class="thongbao" v-if="error && error.username">{{ error.username[0]}}</p>
 								</div>
 								<div class="form-group col-md-4">
 									<label class="col-form-label col-form-label-sm">Tên hiển thị</label>
 									<input type="text" class="form-control form-control-sm" 
 										:class="{'is-invalid' : (error && error.fullname)}" 
 										v-model="fullname">
-									<p class="thongbao" v-if="error && error.display_name">{{ error.display_name[0]}}</p>
+									<p class="thongbao" v-if="error && error.fullname">{{ error.fullname[0]}}</p>
 								</div>
 								<div class="form-group col-md-4">
 									<label class="col-form-label col-form-label-sm">Mật khẩu</label>
 									<input type="password" class="form-control form-control-sm" 
 										:class="{'is-invalid' : (error && error.password)}" 
 										v-model="password">
-									<p class="thongbao" v-if="error && error.key_code">{{ error.key_code[0]}}</p>
+									<p class="thongbao" v-if="error && error.password">{{ error.password[0]}}</p>
 								</div>
 							</div>
 
@@ -37,12 +37,13 @@
 									<label class="col-form-label col-form-label-sm">Phân quyền</label>
 									<v-select multiple v-model="roles" :options="listRole.data" :reduce="(role)=>{return role.id}" label="name"></v-select>
 								</div>
-								
 							</div>
 							<div class="form-group col-md-12 text-right">
-								<button type="submit" class="btn btn-primary btn-sm">Thêm chức năng</button>
+								<button type="submit" class="btn btn-primary btn-sm">Thêm Tài khoản</button>
 							</div>
-
+							<div class="alert alert-warning col-md-12 text-center" v-if="message!=''">
+									{{ message }}
+							</div>
 					</form>
 					<!-- end form -->
 					</div>
@@ -85,6 +86,7 @@ export default {
 			roles:[],
 			error:'',
 			listRole:'',
+			message:'',
 		}
 	},
 	computed:{
@@ -117,11 +119,13 @@ export default {
 			})
 			.catch(error=>{
 				this.error = error.response.data.errors;
-				// console.log(error.response);
+				if(error.response.data.errors == undefined){
+					this.message = "Bạn không có quyền thực hiện thao tác này !";
+				}
 			});
 		},
 		loadData(){
-			this.$store.dispatch('acListChucNang',this.page);
+			this.$store.dispatch('acListUser',this.page);
 		},
 		loadListRole(){
 			var n=0;
@@ -141,7 +145,7 @@ export default {
 	},
 	mounted(){
 		this.loadListRole();
-		if(this.$store.state.listUser == ''){this.$store.dispatch('acListUser',1);}
+		if(this.$store.state.listUser == ''){this.$store.dispatch('acListUser',this.page);}
 	}
 }
 </script>

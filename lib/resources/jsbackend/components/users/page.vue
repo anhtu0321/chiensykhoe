@@ -53,26 +53,26 @@ export default {
 	methods:{
 		setPage(newPage){
 			this.currentPage = newPage;
-			this.$store.dispatch('acPageChucNang', newPage);
+			this.$store.dispatch('acPageUser', newPage);
 			this.$emit('loadData');
 		},
 		prev(){
 			if(this.currentPage > 1){
 				this.currentPage--;
-				this.$store.dispatch('acPageChucNang', this.currentPage);
+				this.$store.dispatch('acPageUser', this.currentPage);
 				this.$emit('loadData');
 			}
 		},
 		next(){
 			if(this.currentPage < this.last_pages){
 				this.currentPage++;
-				this.$store.dispatch('acPageChucNang', this.currentPage);
+				this.$store.dispatch('acPageUser', this.currentPage);
 				this.$emit('loadData');
 			}
 		}
 	},
 	created(){
-		this.currentPage = this.$store.state.pageChucNang;
+		this.currentPage = this.$store.state.pageUser;
 	}
 
 }

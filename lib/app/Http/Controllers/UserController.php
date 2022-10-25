@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::with('role:role.id,role.name')->orderby('id','desc')->paginate(10);
+        return User::with('role:role.id,role.name')->orderby('id','desc')->paginate(2);
     }
 
     /**
@@ -35,6 +35,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validateForm($request);
         try{
             DB::beginTransaction();
             $user = new User;
@@ -80,6 +81,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validateForm($request);
         try{
             DB::beginTransaction();
             $user = User::find($id);
@@ -102,6 +104,28 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+            DB::beginTransaction();
+            $user = User::find($id);
+            $user->role()->detach();
+            User::destroy($id);
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollback();
+        }
+    }
+    public function validateForm(Request $request){
+        return $request->validate([
+            'username'=>'required',
+            'fullname'=>'required',
+        ],
+        $messages=[
+            'required'=>':attribute không được để trống !'
+        ],
+        $attribute=[
+            'username'=>"Tên tài khoản",
+            'fullname'=>"Tên hiển thị",
+        ]
+        );
     }
 }

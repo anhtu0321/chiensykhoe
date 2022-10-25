@@ -46,6 +46,9 @@
 							<div class="form-group col-md-12 text-right">
 								<button type="submit" class="btn btn-primary btn-sm">Thêm chức năng</button>
 							</div>
+							<div class="alert alert-warning col-md-12 text-center" v-if="message!=''">
+									{{ message }}
+							</div>
 
 					</form>
 					<!-- end form -->
@@ -86,6 +89,7 @@ export default {
 			error:'',
 			listData:'',
 			chuc_nang_cha:'',
+			message:'',
 		}
 	},
 	computed:{
@@ -120,7 +124,9 @@ export default {
 			})
 			.catch(error=>{
 				this.error = error.response.data.errors;
-				// console.log(error.response);
+				if(error.response.data.errors == undefined){
+					this.message = "Bạn không có quyền thực hiện thao tác này !";
+				}
 			});
 		},
 		loadData(){

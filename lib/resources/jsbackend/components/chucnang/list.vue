@@ -66,6 +66,9 @@ export default {
                         this.$emit('deleted');
                         swal('Xóa Thành công !');
                     })
+                    .catch(e=>{
+                        swal('Bạn không có quyền thực hiện thao tác này !');
+                    })
                 }
             })
         },

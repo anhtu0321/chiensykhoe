@@ -47,6 +47,9 @@
 								<button type="submit" class="btn btn-success btn-sm" >Sửa Chức năng</button>
 								<router-link to="/chucnang" class="btn btn-warning btn-sm">Quay lại</router-link>
 							</div>
+							<div class="alert alert-warning col-md-12 text-center" v-if="message!=''">
+									{{ message }}
+							</div>
 					</form>
 					</div>
 				</div>
@@ -94,6 +97,7 @@ export default {
 			error:'',
 			chuc_nang_cha:'',
 			listData:'',
+			message:'',
 		}
 	},
 	computed:{
@@ -115,10 +119,13 @@ export default {
 			.then(response=>{
 				this.loadData();
 				this.listChucNangCha();
-				swal("Update thành công !");
+				swal("Cập nhật thành công !");
 			})
 			.catch(error=>{
 				this.error = error.response.data.errors;
+				if(error.response.data.errors == undefined){
+					this.message = "Bạn không có quyền thực hiện thao tác này !";
+				}
 			});
 		},
 		listChucNangCha(){
@@ -146,17 +153,23 @@ export default {
 			
 		},
 		loadDataById(id){
-			axios.get('/chiensykhoe/admin/getChucNang/'+id)
-			.then(response=>{
-				this.name = response.data[0].name;
-				this.display_name = response.data[0].display_name;
-				this.key_code = response.data[0].key_code;
-				this.parent_id = response.data[0].parent_id;
-			})
-			.catch(
-				()=>{this.loadDataById(id);}
-			)
-		
+			var n=0;
+			var load = ()=>{
+				axios.get('/chiensykhoe/admin/getChucNang/'+id)
+				.then(response=>{
+					this.name = response.data[0].name;
+					this.display_name = response.data[0].display_name;
+					this.key_code = response.data[0].key_code;
+					this.parent_id = response.data[0].parent_id;
+				})
+				.catch( e=>{
+					n+=1;
+					if(n<5){
+						load();
+					}
+				})
+			}
+			load();
 		},
 		// ktquyen(key_code){
 		// 	for(var i in this.listPermissionOfUser){

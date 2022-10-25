@@ -39,4 +39,14 @@ class User extends Authenticatable
     public function role(){
         return $this->belongsToMany('App\Role','user_role', 'user_id', 'role_id');
     }
+    public function ktraphanquyen($key_code){ 
+        $roles = auth()->user()->role;
+        foreach($roles as $role){
+            $permission = $role->permission;
+            if($permission->contains('key_code',$key_code)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

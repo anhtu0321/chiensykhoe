@@ -58,10 +58,13 @@ export default {
                     swal('Bạn đã hủy lệnh');
                 }
                 if(value == 'delete'){
-                    axios.get('/chiensykhoe/admin/deleteChucNang/'+id)
+                    axios.get('/chiensykhoe/admin/deleteUser/'+id)
                     .then(res=>{
                         this.$emit('deleted');
                         swal('Xóa Thành công !');
+                    })
+                    .catch(e=>{
+                        swal('Bạn không có quyền thực hiện thao tác này !');
                     })
                 }
             })
