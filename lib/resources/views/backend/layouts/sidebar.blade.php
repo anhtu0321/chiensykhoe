@@ -53,6 +53,26 @@
 						</a>
 					</router-link>
 				</li>
+				<li class="nav-item">
+					<router-link to="/donvi" class="nav-link">
+						<a>
+							<i class="nav-icon fas fa-th"></i>
+							<p>
+								QL Đơn vị
+							</p>
+						</a>
+					</router-link>
+				</li>
+				<li class="nav-item">
+					<router-link to="/canbo" class="nav-link">
+						<a>
+							<i class="nav-icon fas fa-th"></i>
+							<p>
+								QL Cán bộ
+							</p>
+						</a>
+					</router-link>
+				</li>
 				
 				<li class="nav-item">
 					<a href="{{route('logout')}}" class="nav-link">

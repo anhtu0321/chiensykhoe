@@ -65,6 +65,32 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('delete_permission', function($user){
             return $user->ktraphanquyen('delete_permission');
         });
+        // gate Đơn vị
+        Gate::define('view_donvi', function($user){
+            return $user->ktraphanquyen('view_donvi');
+        });
+        Gate::define('add_donvi', function($user){
+            return $user->ktraphanquyen('add_donvi');
+        });
+        Gate::define('edit_donvi', function($user){
+            return $user->ktraphanquyen('edit_donvi');
+        });
+        Gate::define('delete_donvi', function($user){
+            return $user->ktraphanquyen('delete_donvi');
+        });
+        // gate Cán bộ
+        Gate::define('view_canbo', function($user){
+            return $user->ktraphanquyen('view_canbo');
+        });
+        Gate::define('add_canbo', function($user){
+            return $user->ktraphanquyen('add_canbo');
+        });
+        Gate::define('edit_canbo', function($user){
+            return $user->ktraphanquyen('edit_canbo');
+        });
+        Gate::define('delete_canbo', function($user){
+            return $user->ktraphanquyen('delete_canbo');
+        });
     }
 }
 

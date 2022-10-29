@@ -39,5 +39,22 @@ Route::group(['prefix'=>'admin'], function(){
     Route::post('/editUser/{id}','UserController@update')->middleware('can:edit_user');
     Route::get('/deleteUser/{id}','UserController@destroy')->middleware('can:delete_user');
     Route::get('/getUser/{id}','UserController@edit');
+    // donvi
+    Route::get('/listDonvi', 'DonviController@index')->middleware('can:view_donvi');
+    Route::post('/addDonvi', 'DonviController@store')->middleware('can:add_donvi');
+    Route::post('/editDonvi/{id}','DonviController@update')->middleware('can:edit_donvi');
+    Route::get('/deleteDonvi/{id}','DonviController@destroy')->middleware('can:delete_donvi');
+    Route::get('/getDonvi/{id}','DonviController@edit');
+    // canbo
+    Route::get('/listCanbo', 'CanboController@index')->middleware('can:view_canbo');
+    Route::post('/addCanbo', 'CanboController@store')->middleware('can:add_canbo');
+    Route::post('/editCanbo/{id}','CanboController@update')->middleware('can:edit_canbo');
+    Route::get('/deleteCanbo/{id}','CanboController@destroy')->middleware('can:delete_canbo');
+    Route::get('/getCanbo/{id}','CanboController@edit');
 
 });
+// Dữ liệu liên quan
+    Route::get('/listKhoi','Dulieulienquan@listKhoi');
+    Route::get('/listCapbac','Dulieulienquan@listCapbac');
+    Route::get('/listChucvu','Dulieulienquan@listChucvu');
+    Route::get('/listDonvi','Dulieulienquan@listDonvi');

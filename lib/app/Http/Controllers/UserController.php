@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::with('role:role.id,role.name')->orderby('id','desc')->paginate(2);
+        return User::with('role:role.id,role.name')->orderby('id','desc')->paginate(10);
     }
 
     /**
