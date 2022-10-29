@@ -2,9 +2,9 @@
 	<div>
 		<content-header :tieude="tieude" :link="link"></content-header>
         <section class="content">
-    		<div class="container-fluid">
+    		<div class="container">
 				<div class="row">
-					<div class="col-md-10 main">
+					<div class="col-md-12 main">
 						<form method="post" @submit.prevent="edit">
 							<div class="form-row">
 								<div class="form-group col-md-4">
@@ -55,28 +55,17 @@
 				</div>
 			</div>
   		</section>
-		<div class="container-fluid">
+		<div class="container">
 			<div class="row">
-				<div class="col-md-10 list">
+				<div class="col-md-12 list">
 					<list @loadDataById='loadDataById' :listData='listData' @deleted="loadData()"></list>
 				</div>
-			</div>
-		</div>
-		<div class="row">
-            <div class="col-md-10 trang justify-content-end">
-                <paginate :last_pages="listData.last_page" @loadData="loadData"></paginate>
-            </div>
-        </div>
-	</div>
-	<!-- <div v-else>
-		<div class="container-fluid">
-			<div class="row">
-				<div class="mt-2 mr-2 alert" style="font-size:2rem; color:red">
-					Bạn không có quyền xem mục này !
+				<div class="col-md-12 trang justify-content-end">
+					<paginate :last_pages="listData.last_page" @loadData="loadData"></paginate>
 				</div>
 			</div>
 		</div>
-	</div> -->
+	</div>
 
 </template>
 

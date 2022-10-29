@@ -2,9 +2,9 @@
     <div>        
         <content-header :tieude="tieude" :link="link"></content-header>
         <section class="content">
-    		<div class="container-fluid">
+    		<div class="container">
 				<div class="row">
-					<div class="col-md-10 main">
+					<div class="col-md-12 main">
 						<!-- form -->
 						<form method="post" @submit.prevent="edit">
 
@@ -62,18 +62,17 @@
 				</div>
 			</div>
   		</section>
-		<div class="container-fluid">
+		<div class="container">
 			<div class="row">
-				<div class="col-md-10 list">
+				<div class="col-md-12 list">
 					<list :listData='listData' @deleted="loadData" @loadDataById="getDataById"></list>
+				</div>
+				<div class="col-md-12 trang justify-content-end">
+					<paginate :last_pages="listData.last_page" @loadData="loadData"></paginate>
 				</div>
 			</div>
 		</div>
-		<div class="row">
-            <div class="col-md-10 trang justify-content-end">
-                <paginate :last_pages="listData.last_page" @loadData="loadData"></paginate>
-            </div>
-        </div>
+		
 	</div>
 </template>
 

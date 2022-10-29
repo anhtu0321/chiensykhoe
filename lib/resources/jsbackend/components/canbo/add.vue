@@ -2,9 +2,9 @@
 	<div>
 		<content-header :tieude="tieude" :link="link"></content-header>
         <section class="content">
-    		<div class="container-fluid">
+    		<div class="container">
 				<div class="row">
-					<div class="col-md-10 main">
+					<div class="col-md-12 main">
 						<!-- form -->
 						<form method="post" @submit.prevent="add">
 
@@ -44,9 +44,7 @@
 								</div>
 								<div class="form-group col-md-4">
 									<label class="col-form-label col-form-label-sm">Đơn vị</label>
-									<select class="form-control form-control-sm" v-model="don_vi">
-										<option v-for="list in listDonvi" :key="list.id" :value="list.id">{{list.ten_don_vi}}</option>
-									</select>
+									<v-select v-model="don_vi" :options="listDonvi" :reduce="(e)=>{return e.id}" label="ten_don_vi"></v-select>
 								</div>
 							</div>
 
@@ -63,18 +61,16 @@
 				</div>
 			</div>
   		</section>
-		<div class="container-fluid">
+		<div class="container">
 			<div class="row">
-				<div class="col-md-10 list">
+				<div class="col-md-12 list">
 					<list :listData="listData" @deleted='loadData'></list>
+				</div>
+				<div class="col-md-12 trang justify-content-end">
+					<paginate :last_pages="listData.last_page" @loadData='loadData'></paginate>
 				</div>
 			</div>
 		</div>
-		<div class="row">
-            <div class="col-md-10 trang justify-content-end">
-                <paginate :last_pages="listData.last_page" @loadData='loadData'></paginate>
-            </div>
-        </div>
 	</div>
 
 </template>
@@ -84,6 +80,8 @@
 import contentHeader from '../content_header'
 import list from './list.vue'
 import paginate from './page.vue'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
 export default {
 	data(){
 		return{
@@ -107,7 +105,7 @@ export default {
 		page(){return this.$store.state.pageCanbo;}
 	},
 	components:{
-		contentHeader, list, paginate
+		contentHeader, list, paginate, vSelect
 	},
 	methods:{
 		add(){
@@ -199,6 +197,13 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
+.vs--single{
+	padding: 0;
+	margin:0;
+	height: calc(1.8125rem + 2px);
+	font-size: 0.875rem;
+	line-height: 1.5;
+	border-radius: 0.2rem;
+}
 </style>

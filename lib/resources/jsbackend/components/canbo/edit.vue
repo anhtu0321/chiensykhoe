@@ -2,9 +2,9 @@
 	<div>
 		<content-header :tieude="tieude" :link="link"></content-header>
         <section class="content">
-    		<div class="container-fluid">
+    		<div class="container">
 				<div class="row">
-					<div class="col-md-10 main">
+					<div class="col-md-12 main">
 						<form method="post" @submit.prevent="edit">
 							<div class="form-row">
 								<div class="form-group col-md-4">
@@ -42,9 +42,7 @@
 								</div>
 								<div class="form-group col-md-4">
 									<label class="col-form-label col-form-label-sm">Đơn vị</label>
-									<select class="form-control form-control-sm" v-model="don_vi">
-										<option v-for="list in listDonvi" :key="list.id" :value="list.id">{{list.ten_don_vi}}</option>
-									</select>
+									<v-select v-model="don_vi" :options="listDonvi" :reduce="(e)=>{return e.id}" label="ten_don_vi"></v-select>
 								</div>
 							</div>
 							<div class="form-group col-md-12 text-right">
@@ -59,18 +57,16 @@
 				</div>
 			</div>
   		</section>
-		<div class="container-fluid">
+		<div class="container">
 			<div class="row">
-				<div class="col-md-10 list">
+				<div class="col-md-12 list">
 					<list @loadDataById='loadDataById' :listData='listData' @deleted="loadData()"></list>
+				</div>
+				<div class="col-md-12 trang justify-content-end">
+					<paginate :last_pages="listData.last_page" @loadData="loadData"></paginate>
 				</div>
 			</div>
 		</div>
-		<div class="row">
-            <div class="col-md-10 trang justify-content-end">
-                <paginate :last_pages="listData.last_page" @loadData="loadData"></paginate>
-            </div>
-        </div>
 	</div>
 
 
@@ -81,6 +77,8 @@
 import contentHeader from '../content_header.vue'
 import list from './list.vue'
 import paginate from './page.vue'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
 export default {
 	data(){
 		return{
@@ -204,7 +202,7 @@ export default {
 			load();
 		},
 	},
-	components:{contentHeader, list, paginate},
+	components:{contentHeader, list, paginate, vSelect},
 	mounted(){
 		this.loadData();
 		this.loadCapbac();
