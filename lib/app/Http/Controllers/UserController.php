@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use DB;
+use Hash;
 class UserController extends Controller
 {
     /**
@@ -127,5 +128,32 @@ class UserController extends Controller
             'fullname'=>"Tên hiển thị",
         ]
         );
+    }
+    public function doimatkhau(Request $request){
+        $user = auth()->user();
+        $request->validate([
+                'oldpass'=>'required',
+                'newpass'=>'required',
+                'renewpass'=>'required',
+            ],
+            $messages=[
+                'required'=>':attribute không được để trống !'
+            ],
+            $attributes=[
+                'oldpass'=>'Mật khẩu cũ',
+                'newpass'=>'Mật khẩu mới',
+                'renewpass'=>'Nhập lại mật khẩu mới',
+            ]
+        ); 
+        if(!Hash::check($request->oldpass, $user->password)){
+            return response()->json([
+                'message' =>'Dữ liệu không hợp lệ !',
+                'errors' => ['oldpass'=>['Mật khẩu cũ không đúng !']],
+            ], 422);
+        }else{
+            $user->password  = bcrypt($request->newpass);
+            $user->save();
+        }
+        
     }
 }

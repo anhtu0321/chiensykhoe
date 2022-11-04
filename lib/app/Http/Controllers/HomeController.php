@@ -10,6 +10,7 @@ class HomeController extends Controller
         $this->middleware('kt');
     }
     public function getHome(){
-        return view('welcome');
+        $user = auth()->user()->fullname;
+        return view('home', compact('user'));
     }
 }

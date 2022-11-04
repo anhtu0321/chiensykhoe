@@ -39,6 +39,7 @@ Route::group(['prefix'=>'admin'], function(){
     Route::post('/editUser/{id}','UserController@update')->middleware('can:edit_user');
     Route::get('/deleteUser/{id}','UserController@destroy')->middleware('can:delete_user');
     Route::get('/getUser/{id}','UserController@edit');
+    Route::post('/doimatkhau','UserController@doimatkhau');
     // donvi
     Route::get('/listDonvi', 'DonviController@index')->middleware('can:view_donvi');
     Route::post('/addDonvi', 'DonviController@store')->middleware('can:add_donvi');
