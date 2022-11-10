@@ -2,23 +2,31 @@
     <div class="danh-sach">
         <div class="danh-sach__title">THÊM DANH SÁCH KIỂM TRA</div>
         <div class="danh-sach__content">
-            <form>
+            <form method="post" @submit.prevent='add'>
                 <div class="form-row">
-
-                    <div class="form-group col-md-6">
-                        <label for="exampleInputEmail1">Tên danh sách kiểm tra</label>
-                        <input type="email" class="form-control" >
+                    <div class="form-group col-md-12">
+                        <label for="">Tên danh sách kiểm tra</label>
+                        <input type="text" class="form-control" v-model="ten_danh_sach">
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="exampleInputEmail1">Năm kiểm tra</label>
-                        <input type="email" class="form-control" >
+                    <div class="form-group col-md-4">
+                        <label for="">Năm kiểm tra</label>
+                        <input type="text" class="form-control" v-model="nam">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input type="password" class="form-control">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="">Quy tắc xếp loại</label>
+                        <select class="form-control" v-model="quy_tac">
+                            <option value="0">--- Chọn quy tắc xếp loại ---</option>
+                            <option value="1">Theo thông tư 02 ngày 20/2/2022</option>
+                        </select>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-info">Submit</button>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <button type="submit" class="btn btn-info">Thêm danh sách</button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -26,7 +34,31 @@
 
 <script>
 export default {
+    data(){
+        return {
+            ten_danh_sach:'',
+            nam:'',
+            quy_tac:0
+        }
+    },
+    methods:{
+        add(){
+            let data = new FormData();
+            data.append('ten_danh_sach', this.ten_danh_sach);
+            data.append('nam', this.nam);
+            data.append('quy_tac', this.quy_tac);
+            axios.post('/chiensykhoe/addDanhSach', data)
+            .then(response=>{
+                this.ten_danh_sach="";
+                this.nam="";
+                this.quy_tac=0;
+            })
+            .catch(err=>{
+                
+            })
+        }
 
+    }
 }
 </script>
 

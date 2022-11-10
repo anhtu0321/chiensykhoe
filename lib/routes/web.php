@@ -59,3 +59,13 @@ Route::group(['prefix'=>'admin'], function(){
     Route::get('/listCapbac','Dulieulienquan@listCapbac');
     Route::get('/listChucvu','Dulieulienquan@listChucvu');
     Route::get('/listDonvi','Dulieulienquan@listDonvi');
+
+// XỬ LÝ TẠI FRONT END
+    // danh sach
+    Route::post('/addDanhSach','DanhsachController@store');
+    // quy tac
+    Route::get('/listQuytac','QuytacController@index');
+    Route::get('/editQuytac/{id}','QuytacController@edit');
+    Route::post('/updateQuytac/{id}','QuytacController@update');
+    Route::post('/addQuyTac','QuytacController@store');
+    Route::get('/deleteQuytac/{id}','QuytacController@deleted');

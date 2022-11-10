@@ -83,7 +83,7 @@ html {
 }
 
 .header {
-    width: 100%;
+    width: 95%;
     max-width: 1200px;
     height: 95px;
     margin: 0 auto;
@@ -114,11 +114,12 @@ html {
     width: 25%;
     font-weight: bold;
     position: relative;
+    display: flex;
+    justify-content: end;
 }
 
 .header__user-dropdow {
     display: flex;
-    justify-content: flex-start;
     align-items: center;
     cursor: pointer;
     padding: 5px;
@@ -140,7 +141,8 @@ html {
     min-width: 150px;
     padding: 5px 0px;
     box-shadow: 2px 5px 7px 1px rgb(90, 90, 90);
-    left: 30px;
+    right: 0px;
+    top: 35px;
     display: none;
 }
 
@@ -180,7 +182,7 @@ html {
 }
 
 .sidebar {
-    width: 100%;
+    width: 95%;
     max-width: 1200px;
     height: 40px;
     margin: 0 auto;
@@ -220,7 +222,7 @@ html {
 }
 
 .content {
-    width: 100%;
+    width: 95%;
     max-width: 1200px;
     margin: 0 auto;
     background: #ffffff;
