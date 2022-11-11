@@ -69,3 +69,9 @@ Route::group(['prefix'=>'admin'], function(){
     Route::post('/updateQuytac/{id}','QuytacController@update');
     Route::post('/addQuyTac','QuytacController@store');
     Route::get('/deleteQuytac/{id}','QuytacController@deleted');
+    // môn thi
+    Route::get('/listMonthi','MonthiController@index');
+    Route::get('/editMonthi/{id}','MonthiController@edit');
+    Route::post('/updateMonthi/{id}','MonthiController@update');
+    Route::post('/addMonthi','MonthiController@store');
+    Route::get('/deleteMonthi/{id}','MonthiController@deleted');

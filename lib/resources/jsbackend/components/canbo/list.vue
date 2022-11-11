@@ -18,7 +18,7 @@
                 <td>{{index + 1}}</td>
                 <td>{{list.ho_ten}}</td>
                 <td>{{list.nam_sinh}}</td>
-                <td>{{list.gioi_tinh==0?'Nam':list.gioi_tinh==1?'Nữ':''}}</td>
+                <td>{{list.gioi_tinh==0?'Nam cán bộ':list.gioi_tinh==1?'Nam cảnh vệ':list.gioi_tinh==2?'Nữ cán bộ':''}}</td>
                 <td>{{list.capbac.ten_cap_bac}}</td>
                 <td>{{list.chucvu.ten_chuc_vu}}</td>
                 <td>{{list.donvi.ten_don_vi}}</td>

@@ -24,10 +24,11 @@
 									<p class="thongbao" v-if="error && error.nam_sinh">{{ error.nam_sinh[0]}}</p>
 								</div>
 								<div class="form-group col-md-4">
-									<label class="col-form-label col-form-label-sm">Giới tính</label>
+									<label class="col-form-label col-form-label-sm">Đối tượng/ Giới tính</label>
 									<select class="form-control form-control-sm" v-model="gioi_tinh">
-										<option value="0">Nam</option>
-										<option value="1">Nữ</option>
+										<option value="0">Nam cán bộ</option>
+										<option value="1">Nam Cảnh vệ</option>
+										<option value="2">Nữ cán bộ</option>
 									</select>
 								</div>
 								<div class="form-group col-md-4">
