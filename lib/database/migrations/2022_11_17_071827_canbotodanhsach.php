@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMonthisTable extends Migration
+class Canbotodanhsach extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateMonthisTable extends Migration
      */
     public function up()
     {
-        Schema::create('monthi', function (Blueprint $table) {
+        Schema::create('danhsach_canbo', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('ten_mon_thi');
+            $table->integer('danhsach_id');
+            $table->integer('canbo_id');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class CreateMonthisTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('monthi');
+        //
     }
 }

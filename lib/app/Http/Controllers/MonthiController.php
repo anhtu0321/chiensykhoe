@@ -7,11 +7,11 @@ use App\Monthi;
 class MonthiController extends Controller
 {
     public function index(Request $request){
-        return Monthi::orderBy('id','desc')->paginate(10);
+        return Monthi::orderBy('id','asc')->paginate(100);
     }
     public function store(Request $request){
         $monthi = new Monthi;
-        $monthi->ten_quy_tac = $request->ten_quy_tac;
+        $monthi->ten_mon_thi = $request->ten_mon_thi;
         $monthi->save();
     }
     public function edit($id){
@@ -19,7 +19,7 @@ class MonthiController extends Controller
     }
     public function update(Request $request, $id){
         $monthi = Monthi::find($id);
-        $monthi->ten_quy_tac = $request->ten_quy_tac;
+        $monthi->ten_mon_thi = $request->ten_mon_thi;
         $monthi->save();
     }
     public function deleted($id){

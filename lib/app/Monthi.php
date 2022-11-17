@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Monthi extends Model
 {
-    protected $table="monthi"
+    protected $table="monthi";
 }

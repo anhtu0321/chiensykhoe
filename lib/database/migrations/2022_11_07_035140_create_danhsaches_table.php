@@ -17,7 +17,7 @@ class CreateDanhsachesTable extends Migration
             $table->bigIncrements('id');
             $table->string('ten_danh_sach');
             $table->integer('nam');
-            $table->string('quy_tac');
+            $table->integer('quy_tac');
             $table->timestamps();
         });
     }

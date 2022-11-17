@@ -7,7 +7,7 @@ use App\Quytac;
 class QuytacController extends Controller
 {
     public function index(Request $request){
-        return Quytac::orderBy('id','desc')->paginate(10);
+        return Quytac::orderBy('id','desc')->paginate(100);
     }
     public function store(Request $request){
         $quytac = new Quytac;

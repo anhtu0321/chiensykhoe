@@ -72,7 +72,7 @@
                                         </div>
 										<div class="form-group col-md-6">
                                             <label for="">Đối tượng/ Giới tính</label>
-                                            <select class="form-control">
+                                            <select class="form-control" v-model="gioi_tinh">
 												<option value="0">Nam Cán bộ</option>
 												<option value="1">Nam Cảnh vệ</option>
 												<option value="2">Nữ cán bộ</option>
@@ -82,11 +82,8 @@
 									<div class="form-row">
                                         <div class="form-group col-md-3">
                                             <label for="">Môn thi</label>
-											<select class="form-control">
-												<option value="1">Co tay xà đơn</option>
-												<option value="1">Bật xa</option>
-												<option value="1">Chạy 100m</option>
-												<option value="1">Chạy 1500m</option>
+											<select class="form-control" v-model="mon_thi">
+												<option v-for="list in listMonthi.data" :key="list.id" :value="list.id">{{list.ten_mon_thi}}</option>
 											</select>
                                         </div>
 										<div class="form-group col-md-3">
@@ -103,12 +100,12 @@
                                         </div>
                                     </div>
                                     <div class="form-row">
-                                        <div class="form-group col-md-12" v-if="mode=='add'">
-                                            <button class="btn btn-info">Thêm</button>
+                                        <div class="form-group col-md-12 text-right" v-if="modeLuat=='add'">
+                                            <button class="btn btn-info">Thêm Luật</button>
                                         </div>
-                                        <div class="form-group col-md-12" v-if="mode=='edit'"> 
-                                            <button class="btn btn-info" @click.prevent="update(idEdit)">Sửa</button>
-                                            <button class="btn btn-warning" @click.prevent="back">Quay lại</button>
+                                        <div class="form-group col-md-12 text-right" v-if="modeLuat=='edit'"> 
+                                            <button class="btn btn-info" @click.prevent="updateLuat(id_luat)">Sửa</button>
+                                            <button class="btn btn-warning" @click.prevent="backLuat">Quay lại</button>
                                         </div>
                                     </div>
                                 </form>
@@ -131,17 +128,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(list, index) in listData.data" :key="list.id" :class="list.id == idEdit? 'tractive':''">
+                                    <tr v-for="(list, index) in listLuat.data" :key="list.id" :class="list.id == id_luat? 'tractive':''">
                                     <th scope="row">{{index+1}}</th>
-                                    <td>18 - 27</td>
-                                    <td>Cán bộ nam</td>
-                                    <td>Co tay xà đơn</td>
-                                    <td>0.7</td>
-                                    <td>1.8</td>
-                                    <td>2.68</td>
+                                    <td>{{ list.min_age }} - {{ list.max_age }}</td>
+                                    <td>{{list.gioi_tinh==0?'Nam cán bộ':list.gioi_tinh==1?'Nam cảnh vệ':list.gioi_tinh==2?'Nữ cán bộ':''}}</td>
+                                    <td>{{list.monthi.ten_mon_thi}}</td>
+                                    <td>{{list.dat}}</td>
+                                    <td>{{list.kha}}</td>
+                                    <td>{{list.gioi}}</td>
                                     <td width="20%">
-                                        <button class="btn btn-warning" @click="edit(list.id)">Sửa</button>
-                                        <button class="btn btn-danger" @click="deleted(list.id)">Xóa</button>
+                                        <button class="btn btn-warning" @click="editLuat(list.id)">Sửa</button>
+                                        <button class="btn btn-danger" @click="deletedLuat(list.id)">Xóa</button>
                                     </td>
                                     </tr>
                                 </tbody>
@@ -167,11 +164,26 @@ export default {
             mode:'add',
             ten_quy_tac:'',
             idEdit:'',
+            // data for modal luat
+            modeLuat:'add',
+            id_quy_tac:'',
+            id_luat:'',
+            min_age:'',
+            max_age:'',
+            gioi_tinh:'',
+            mon_thi:'',
+            dat:'',
+            kha:'',
+            gioi:'',
+            listLuat:'',
         }
     },
     computed:{
         listData(){
             return this.$store.state.listQuytac;
+        },
+        listMonthi(){
+            return this.$store.state.listMonthi;
         }
     },
     methods:{
@@ -240,13 +252,117 @@ export default {
             this.title = "THÊM QUY TẮC XẾP LOẠI";
             this.idEdit = '';
         },
+        // xử lý dữ liệu modal luật 
         loadDataModal(id){
-            // alert('here');
-        }
+            if(this.id_quy_tac != id){this.id_quy_tac = id;}
+            axios.get('/chiensykhoe/listLuat/'+id)
+            .then(response=>{
+                this.listLuat = response.data;
+            })
+            .catch(error=>{
+
+            })
+        },
+        addLuat(){
+            let data = new FormData();
+            data.append('id_quy_tac', this.id_quy_tac);
+            data.append('min_age', this.min_age);
+            data.append('max_age', this.max_age);
+            data.append('gioi_tinh', this.gioi_tinh);
+            data.append('mon_thi', this.mon_thi);
+            data.append('dat', this.dat);
+            data.append('kha', this.kha);
+            data.append('gioi', this.gioi);
+            axios.post('/chiensykhoe/addLuat', data)
+            .then(response=>{
+                this.min_age="";
+                this.max_age="";
+                this.dat="";
+                this.kha="";
+                this.gioi="";
+                this.loadDataModal(this.id_quy_tac);
+            })
+            .catch(err=>{
+                
+            })
+        },
+        editLuat(id){
+            this.modeLuat = 'edit';
+            this.id_luat = id;
+            axios.get('/chiensykhoe/editLuat/'+id)
+            .then(response=>{
+                this.min_age = response.data.min_age;
+                this.max_age = response.data.max_age;
+                this.gioi_tinh = response.data.gioi_tinh;
+                this.mon_thi = response.data.mon_thi;
+                this.dat = response.data.dat;
+                this.kha = response.data.kha;
+                this.gioi = response.data.gioi;
+            })
+            .catch(error=>{
+
+            })
+        },
+        updateLuat(id){
+            let data = new FormData();
+            data.append('id_quy_tac', this.id_quy_tac);
+            data.append('min_age', this.min_age);
+            data.append('max_age', this.max_age);
+            data.append('gioi_tinh', this.gioi_tinh);
+            data.append('mon_thi', this.mon_thi);
+            data.append('dat', this.dat);
+            data.append('kha', this.kha);
+            data.append('gioi', this.gioi);
+            axios.post('/chiensykhoe/updateLuat/'+id, data)
+            .then(response=>{
+                this.loadDataModal(this.id_quy_tac);
+                swal('update thành công !');
+            })
+            .catch(err=>{
+                
+            })
+        },
+        deletedLuat(id){
+            swal('Bạn có chắc chắn muốn xóa nó ???',{
+                buttons:{
+                    cancel:'Hủy bỏ',
+                    delete:'Xóa'
+                }
+            })
+            .then(value=>{
+                if(value == 'cancel'){
+                    swal('Bạn đã hủy lệnh');
+                }
+                if(value == 'delete'){
+                    axios.get('/chiensykhoe/deleteLuat/'+id)
+                    .then(res=>{
+                        this.loadDataModal(this.id_quy_tac);
+                        swal('Xóa Thành công !');
+                    })
+                    .catch(e=>{
+                        swal('Bạn không có quyền thực hiện thao tác này !');
+                    })
+                }
+            })
+        },
+        backLuat(){
+            this.modeLuat = 'add';
+            this.id_luat = '';
+            this.min_age = '';
+                this.max_age = '';
+                this.gioi_tinh = '';
+                this.mon_thi = '';
+                this.dat = '';
+                this.kha = '';
+                this.gioi = '';
+        },
     },
     mounted(){
         if(this.$store.state.listQuytac==''){
             this.$store.dispatch('acListQuytac');
+        }
+        if(this.$store.state.listMonthi==''){
+            this.$store.dispatch('acListMonthi');
         }
     }
 }
@@ -273,10 +389,6 @@ export default {
         left:30px;
         top:-10px;
         padding:0px 10px;
-    }
-    .tractive, tractive:hover{
-        background:rgb(171, 204, 178);
-
     }
     .modal-lga{
         max-width:1000px;

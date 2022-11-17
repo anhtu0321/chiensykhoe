@@ -59,10 +59,16 @@ Route::group(['prefix'=>'admin'], function(){
     Route::get('/listCapbac','Dulieulienquan@listCapbac');
     Route::get('/listChucvu','Dulieulienquan@listChucvu');
     Route::get('/listDonvi','Dulieulienquan@listDonvi');
+    Route::post('/searchCanbo','Dulieulienquan@searchCanbo');
+
 
 // XỬ LÝ TẠI FRONT END
     // danh sach
-    Route::post('/addDanhSach','DanhsachController@store');
+    Route::get('/listDanhsach','DanhsachController@index');
+    Route::post('/addDanhsach','DanhsachController@store');
+    Route::get('/editDanhsach/{id}','DanhsachController@edit');
+    Route::post('/updateDanhsach/{id}','DanhsachController@update');
+    Route::get('/deleteDanhsach/{id}','DanhsachController@deleted');
     // quy tac
     Route::get('/listQuytac','QuytacController@index');
     Route::get('/editQuytac/{id}','QuytacController@edit');
@@ -75,3 +81,14 @@ Route::group(['prefix'=>'admin'], function(){
     Route::post('/updateMonthi/{id}','MonthiController@update');
     Route::post('/addMonthi','MonthiController@store');
     Route::get('/deleteMonthi/{id}','MonthiController@deleted');
+    // Luật
+    Route::get('/listLuat/{id_quy_tac}','LuatController@index');
+    Route::get('/editLuat/{id}','LuatController@edit');
+    Route::post('/updateLuat/{id}','LuatController@update');
+    Route::post('/addLuat','LuatController@store');
+    Route::get('/deleteLuat/{id}','LuatController@deleted');
+    // Thêm cán bộ vào danh sach
+    Route::post('/addCanboToDanhsach','CanbotodanhsachController@store');
+    Route::post('/listCanboOfDanhsach/{id}','CanbotodanhsachController@index');
+
+    

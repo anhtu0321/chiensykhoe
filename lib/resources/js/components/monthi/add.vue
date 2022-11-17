@@ -164,10 +164,7 @@ export default {
         top:-10px;
         padding:0px 10px;
     }
-    .tractive, tractive:hover{
-        background:rgb(171, 204, 178);
-
-    }
+   
     .modal-lga{
         max-width:1000px;
     }
