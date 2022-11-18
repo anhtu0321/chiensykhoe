@@ -12,11 +12,15 @@
                         <label for="">Năm kiểm tra</label>
                         <input type="text" class="form-control" v-model="nam">
                     </div>
+                     <div class="form-group col-md-8">
+                        <label for="">Môn thi</label>
+                        <vue-select multiple v-model="mon_thi" :options="listMonthi.data" :reduce="e=>{return e.id}" label="ten_mon_thi"></vue-select>
+                    </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="">Quy tắc xếp loại</label>
-                        <select class="form-control" v-model="quy_tac">
+                        <select class="form-control" v-model="quy_tac" >
                             <option v-for="list in listQuytac.data" :key="list.id" :value="list.id">{{list.ten_quy_tac}}</option>
                         </select>
                     </div>
@@ -73,11 +77,14 @@
 </template>
 
 <script>
+import vueSelect from 'vue-select';
+
 export default {
     data(){
         return {
             ten_danh_sach:'',
             nam:'',
+            mon_thi:[],
             quy_tac:0,
             listDanhsach:'',
             idEdit:'',
@@ -93,6 +100,9 @@ export default {
     computed:{
         listQuytac(){
             return this.$store.state.listQuytac;
+        },
+        listMonthi(){
+            return this.$store.state.listMonthi;
         },
         pagesNumber() {
             if(this.last_pages == null){return [];}
@@ -129,10 +139,14 @@ export default {
             data.append('ten_danh_sach', this.ten_danh_sach);
             data.append('nam', this.nam);
             data.append('quy_tac', this.quy_tac);
+            for(let i in this.mon_thi){
+                data.append('mon_thi[]', this.mon_thi[i]);
+            }
             axios.post('/chiensykhoe/addDanhsach', data)
             .then(response=>{
                 this.ten_danh_sach="";
                 this.nam="";
+                this.mon_thi=[];
                 this.quy_tac=0;
                 this.loadListDanhsach();
             })
@@ -147,6 +161,7 @@ export default {
             .then(response=>{
                 this.ten_danh_sach = response.data.ten_danh_sach;
                 this.nam = response.data.nam;
+                this.mon_thi = response.data.monthi;
                 this.quy_tac = response.data.quy_tac;
             })
         },
@@ -154,6 +169,9 @@ export default {
             let data = new FormData();
             data.append('ten_danh_sach', this.ten_danh_sach);
             data.append('nam', this.nam);
+            for(let i in this.mon_thi){
+                data.append('mon_thi[]', this.mon_thi[i]);
+            }
             data.append('quy_tac', this.quy_tac);
             axios.post('/chiensykhoe/updateDanhsach/'+this.idEdit, data)
             .then(response=>{
@@ -192,6 +210,7 @@ export default {
             this.idEdit='';
             this.ten_danh_sach='';
             this.nam='';
+            this.mon_thi=[];
             this.quy_tac='';
         },
         loadListDanhsach(page){
@@ -230,9 +249,13 @@ export default {
 			}
 		}
     },
+    components:{vueSelect,},
     mounted(){
         if(this.$store.state.listQuytac==""){
             this.$store.dispatch('acListQuytac');
+        }
+        if(this.$store.state.listMonthi==""){
+            this.$store.dispatch('acListMonthi');
         }
         this.loadListDanhsach(1);
     }

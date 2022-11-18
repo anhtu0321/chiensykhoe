@@ -26,7 +26,7 @@
                     </form>
                 </div>
         </div>
-        <!-- list danh sach -->
+        <!-- list danh sach tìm kiếm -->
         <div class="danh-sach" v-if="listSearch!=''">
             <table class="table">
                 <thead>
@@ -37,7 +37,7 @@
                     <th scope="col">Đối tượng</th>
                     <th scope="col">Đơn vị</th>
                     <th scope="col"><input type="checkbox" id="checkid" @change="checkAll" v-model="check_all"> <label class="checkall" for="checkid">Chọn hết</label></th>
-                    
+                    <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,8 +47,11 @@
                     <td>{{ list.nam_sinh }}</td>
                     <td>{{ list.gioi_tinh==0?'Nam cán bộ':list.gioi_tinh==1?'Nam Cảnh vệ':list.gioi_tinh==2?'Nữ cán bộ':'' }}</td>
                     <td>{{ list.ten_don_vi}}</td>
-                    <td width="20%">
+                    <td width="10%">
                         <input type="checkbox" :value="list.id" v-model="mangcanbo" @change="checkModule()">
+                    </td>
+                    <td width="10%">
+                        <a :href="'/chiensykhoe/admin#/canbo/edit/'+list.id" target="blank"><button class="btn btn-success">Sửa Cán bộ</button></a>
                     </td>
                     </tr>
                 </tbody>
@@ -67,21 +70,25 @@
                     <th scope="col">Năm sinh</th>
                     <th scope="col">Đối tượng</th>
                     <th scope="col">Đơn vị</th>
-                    
+                    <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(list, index) in listCanboOfDanhsach.data" :key="list.id">
+                    <tr v-for="(list, index) in listCanboOfDanhsach" :key="list.id">
                     <th scope="row">{{index+1}}</th>
                     <td>{{ list.ho_ten}}</td>
                     <td>{{ list.nam_sinh }}</td>
                     <td>{{ list.gioi_tinh==0?'Nam cán bộ':list.gioi_tinh==1?'Nam Cảnh vệ':list.gioi_tinh==2?'Nữ cán bộ':'' }}</td>
                     <td>{{ list.ten_don_vi}}</td>
-                    <td width="20%">
+                    <td width="10%">
+                        <button class="btn btn-danger" @click="deleted(list.id)">Xóa </button>
                     </td>
                     </tr>
                 </tbody>
             </table>
+            <div>
+                <router-link :to="'/danhsach'"><button class="btn btn-warning">Quay lại</button></router-link>
+            </div>
         </div> 
         <!-- end -->
   </div>
@@ -181,10 +188,33 @@ export default {
             }
             axios.post('/chiensykhoe/addCanboToDanhsach',data)
             .then(response=>{
-                
+                this.canboOfDanhsach();
             })
             .catch(error=>{
 
+            })
+        },
+        deleted(id){
+            swal('Bạn muốn loại người này khỏi danh sách kiểm tra ???',{
+                buttons:{
+                    cancel:'Hủy bỏ',
+                    delete:'Xóa'
+                }
+            })
+            .then(value=>{
+                if(value == 'cancel'){
+                    swal('Bạn đã hủy lệnh');
+                }
+                if(value == 'delete'){
+                    axios.get('/chiensykhoe/deletedCanboOfDanhsach/'+id)
+                    .then(res=>{
+                        this.canboOfDanhsach();
+                        swal('Xóa thành công !');
+                    })
+                    .catch(e=>{
+                        swal('Bạn không có quyền thực hiện thao tác này !');
+                    })
+                }
             })
         }
     },
@@ -194,6 +224,7 @@ export default {
         if(this.$store.state.listDonvi == ''){
             this.$store.dispatch('acListDonvi');
         }
+        this.canboOfDanhsach();
     },
     components:{
         vueSelect,
@@ -205,6 +236,7 @@ export default {
     .title{
         font-size: 1.2em;
         font-weight: bold;
+        margin-top:15px;
     }
     .danh-sach{
         font-family: 'Montserrat';

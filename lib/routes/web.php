@@ -89,6 +89,7 @@ Route::group(['prefix'=>'admin'], function(){
     Route::get('/deleteLuat/{id}','LuatController@deleted');
     // Thêm cán bộ vào danh sach
     Route::post('/addCanboToDanhsach','CanbotodanhsachController@store');
-    Route::post('/listCanboOfDanhsach/{id}','CanbotodanhsachController@index');
+    Route::get('/listCanboOfDanhsach/{id}','CanbotodanhsachController@index');
+    Route::get('/deletedCanboOfDanhsach/{idCB}','CanbotodanhsachController@destroy');
 
     

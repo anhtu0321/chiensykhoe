@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Danhsach;
+use DB;
 class CanbotodanhsachController extends Controller
 {
     /**
@@ -13,7 +14,18 @@ class CanbotodanhsachController extends Controller
      */
     public function index($id)
     {
-        
+        // return Danhsach::with('canbo')->find($id);
+        return DB::table('danhsach_canbo')
+        ->join('danhsach','danhsach_canbo.danhsach_id','=','danhsach.id')
+        ->join('canbo','danhsach_canbo.canbo_id','=','canbo.id')
+        ->join('donvi','canbo.don_vi','=','donvi.id')
+        ->where('danhsach.id','=',$id)
+        ->select('danhsach_canbo.id','canbo.ho_ten','canbo.nam_sinh','canbo.gioi_tinh','donvi.ten_don_vi')
+        ->orderBy('canbo.don_vi','asc')
+        ->orderBy('canbo.chuc_vu','desc')
+        ->orderBy('canbo.nam_sinh','asc')
+        ->get();
+
     }
 
     /**
@@ -81,6 +93,7 @@ class CanbotodanhsachController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::table('danhsach_canbo')->where('id','=',$id)->delete();
+       
     }
 }

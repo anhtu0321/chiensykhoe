@@ -19,4 +19,7 @@ class Danhsach extends Model
     {
         return $this->belongsToMany('App\Canbo', 'danhsach_canbo', 'danhsach_id', 'canbo_id');
     }
+    public function monthi(){
+        return $this->belongsToMany('App\Monthi', 'danhsach_monthi', 'id_danhsach', 'id_monthi');
+    }
 }
