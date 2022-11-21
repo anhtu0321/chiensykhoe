@@ -43,7 +43,7 @@
                     <tr>
                     <th scope="col">#</th>
                     <th scope="col">Tên danh sách</th>
-                    <th scope="col">Năm kiểm tra</th>
+                    <th scope="col">Năm</th>
                     <th scope="col">Quy tắc</th>
                     <th scope="col"></th>
                     </tr>
@@ -54,7 +54,8 @@
                     <td>{{ list.ten_danh_sach }}</td>
                     <td>{{list.nam}}</td>
                     <td>{{list.quytac.ten_quy_tac}}</td>
-                    <td width="20%">
+                    <td width="35%">
+                        <router-link :to="`/kiemtra/${list.id}`"><button class="btn btn-primary">Kiểm tra</button></router-link>
                         <router-link :to="`/themcanbo/${list.id}`"><button class="btn btn-success">Thêm cán bộ</button></router-link>
                         <button class="btn btn-warning" @click="edit(list.id)">Sửa</button>
                         <button class="btn btn-danger" @click="deleted(list.id)">Xóa</button>
