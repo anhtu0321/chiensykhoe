@@ -7,7 +7,7 @@ use App\Luat;
 class LuatController extends Controller
 {
     public function index($id){
-        return Luat::with('monthi:id,ten_mon_thi')->orderBy('id','asc')->where('id_quy_tac','=',$id)->paginate(100);
+        return Luat::with('monthi:id,ten_mon_thi')->orderBy('id','desc')->where('id_quy_tac','=',$id)->paginate(100);
     }
     public function store(Request $request){
         $luat = new Luat;

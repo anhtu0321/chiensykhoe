@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Danhsach;
+// use App\Donvi;
 use DB;
 class CanbotodanhsachController extends Controller
 {
@@ -14,18 +15,51 @@ class CanbotodanhsachController extends Controller
      */
     public function index($id)
     {
-        // return Danhsach::with('canbo')->find($id);
-        return DB::table('danhsach_canbo')
-        ->join('danhsach','danhsach_canbo.danhsach_id','=','danhsach.id')
-        ->join('canbo','danhsach_canbo.canbo_id','=','canbo.id')
-        ->join('donvi','canbo.don_vi','=','donvi.id')
-        ->where('danhsach.id','=',$id)
-        ->select('danhsach_canbo.id','canbo.ho_ten','canbo.nam_sinh','canbo.gioi_tinh','donvi.ten_don_vi')
-        ->orderBy('canbo.don_vi','asc')
-        ->orderBy('canbo.chuc_vu','desc')
-        ->orderBy('canbo.nam_sinh','asc')
-        ->get();
+        // $donvi = DB::table('donvi')->get(); //Lấy dữ liệu đơn vị
+        // $IDdonvi = collect($donvi)->pluck('id'); //Lấy mảng id đơn vị
+        // $canbo = DB::table('canbo')->whereIn('don_vi', $IDdonvi)->get(); //Lấy dữ liệu cán bộ thuộc đơn vị trên
+        // $canboCollect = collect($canbo)->groupBy('don_vi'); //Nhóm các cán bộ thuộc cùng 1 đơn vị vào 1 mảng
+        // // Hàm dưới để chèn cán bộ vào các đơn vị tương ứng:
+        // $donviReturn = collect($donvi)->map(function($item, $key) use ($canboCollect){
+        //     $canbo = ['canbo' => []];
+        //     if(isset($canboCollect[$item->id])){
+        //         $canbo = ['canbo' => $canboCollect[$item->id]];
+        //     }
+        //     return collect($item)->merge($canbo);
+        // });
+        // return $donviReturn;
 
+        // Tương đương Eloquent ở dưới:
+        // return Donvi::with('canbo')->get();
+        $danhsach = Danhsach::with('canbo.donvi:id,ten_don_vi')->where('id',$id)->get();
+        return $danhsach;
+       
+    }
+    public function indexKiemtra($id){
+        $data = DB::table('danhsach')
+        ->join('danhsach_canbo','danhsach.id','=','danhsach_canbo.id_danhsach')
+        ->join('canbo','danhsach_canbo.id_canbo','=','canbo.id')
+        ->join('donvi','canbo.don_vi','=','donvi.id')
+        ->join('danhsach_monthi','danhsach.id','=','danhsach_monthi.id_danhsach')
+        ->join('monthi','danhsach_monthi.id_monthi','=','monthi.id')
+        ->leftJoin('ketqua',function($join){
+            $join->on('danhsach_canbo.id','=','ketqua.id_ds_canbo')->on('danhsach_monthi.id','=','ketqua.id_ds_monthi');
+        })
+        ->where('danhsach.id',$id)
+        ->select('canbo.ho_ten','canbo.gioi_tinh','canbo.nam_sinh', 'donvi.ten_don_vi','danhsach_canbo.id_canbo','danhsach_monthi.id_monthi', 'monthi.ten_mon_thi', 'ketqua.diem', 'ketqua.xeploai')
+        ->get();
+        $data = collect($data)->groupBy('id_canbo')->values();
+
+        $data = $data->map(function($item, $key){
+            $collect = collect($item[0]);
+            $collect->splice(5);
+            $ketqua = collect($item)->map(function($item, $key){
+                return collect($item)->splice(5);
+            });
+            $ketqua = ['ketqua'=>$ketqua];
+            return $collect->merge($ketqua);
+        });
+        return $data;
     }
 
     /**

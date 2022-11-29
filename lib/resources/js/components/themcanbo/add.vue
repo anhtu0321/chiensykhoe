@@ -79,7 +79,7 @@
                     <td>{{ list.ho_ten}}</td>
                     <td>{{ list.nam_sinh }}</td>
                     <td>{{ list.gioi_tinh==0?'Nam cán bộ':list.gioi_tinh==1?'Nam Cảnh vệ':list.gioi_tinh==2?'Nữ cán bộ':'' }}</td>
-                    <td>{{ list.ten_don_vi}}</td>
+                    <td>{{ list.donvi.ten_don_vi}}</td>
                     <td width="10%">
                         <button class="btn btn-danger" @click="deleted(list.id)">Xóa </button>
                     </td>
@@ -138,7 +138,8 @@ export default {
             var load = ()=>{
                 axios.get('/chiensykhoe/listCanboOfDanhsach/'+this.$route.params.id)
                 .then(response=>{
-                    this.listCanboOfDanhsach = response.data;
+                    this.listCanboOfDanhsach = response.data[0].canbo;
+                    // console.log(response.data[0].canbo);
                 })
                 .catch(eror=>{
                     n+=1;

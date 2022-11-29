@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Canbotodanhsach extends Migration
+class Ketqua extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class Canbotodanhsach extends Migration
      */
     public function up()
     {
-        Schema::create('danhsach_canbo', function (Blueprint $table) {
+        Schema::create('ketqua', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('id_danhsach');
-            $table->integer('id_canbo');
+            $table->integer('id_ds_canbo');
+            $table->integer('id_ds_monthi');
+            $table->integer('diem');
+            $table->string('xeploai');
             $table->timestamps();
         });
     }

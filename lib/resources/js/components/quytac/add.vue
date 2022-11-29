@@ -275,8 +275,7 @@ export default {
             data.append('gioi', this.gioi);
             axios.post('/chiensykhoe/addLuat', data)
             .then(response=>{
-                this.min_age="";
-                this.max_age="";
+                this.mon_thi="";
                 this.dat="";
                 this.kha="";
                 this.gioi="";

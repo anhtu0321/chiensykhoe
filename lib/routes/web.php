@@ -90,6 +90,9 @@ Route::group(['prefix'=>'admin'], function(){
     // Thêm cán bộ vào danh sach
     Route::post('/addCanboToDanhsach','CanbotodanhsachController@store');
     Route::get('/listCanboOfDanhsach/{id}','CanbotodanhsachController@index');
+    Route::get('/listCanboKiemtra/{id}','CanbotodanhsachController@indexKiemtra');
     Route::get('/deletedCanboOfDanhsach/{idCB}','CanbotodanhsachController@destroy');
+    // Kiem tra
+    Route::post('/saveKetqua','KetquaktController@store');
 
     

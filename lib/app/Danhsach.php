@@ -15,9 +15,8 @@ class Danhsach extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function canbo()
-    {
-        return $this->belongsToMany('App\Canbo', 'danhsach_canbo', 'danhsach_id', 'canbo_id');
+    public function canbo(){
+        return $this->belongsToMany('App\Canbo', 'danhsach_canbo', 'id_danhsach', 'id_canbo');
     }
     public function monthi(){
         return $this->belongsToMany('App\Monthi', 'danhsach_monthi', 'id_danhsach', 'id_monthi');
